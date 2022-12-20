@@ -15,7 +15,12 @@ Yes
 
 ## Installing
 
-There are no dependencies, so clone the repository and compile with the rust complier.
+The crates I use are rand and std.
+You can simply:
+`git clone` to clone the repository
+`cargo install` to install all dependencies
+Then `cargo run` to run
+Or `cargo build` to compile then run the executable
 
 ## Parameters
 
