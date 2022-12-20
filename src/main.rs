@@ -11,6 +11,7 @@ fn main() -> io::Result<()> {
     //  TODO: add error handling
     //  TODO: random inputs (appart from the phrase)
     //  TODO: decipher
+    //  TODO: input file
 
     println!("Enter a phrase to cypher:");
     stdin.read_line(&mut phrase_to_cypther).unwrap();
