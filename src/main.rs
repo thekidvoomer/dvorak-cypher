@@ -2,13 +2,12 @@ use std::io;
 
 fn main() -> io::Result<()> {
     let mut phrase_to_cypther = String::new();
-    let mut times_to_cypther = String::new();
-    let mut shift_value = String::new();
-    let mut start_shift = String::new();
+    let times_to_cypther: u32;
+    let shift_value: u32;
+    let start_shift: u32;
 
     let stdin = io::stdin();
 
-    //  TODO: add error handling
     //  TODO: random inputs (appart from the phrase)
     //  TODO: decipher
     //  TODO: input file
@@ -16,20 +15,20 @@ fn main() -> io::Result<()> {
     println!("Enter a phrase to cypher:");
     stdin.read_line(&mut phrase_to_cypther).unwrap();
 
-    println!("Enter the number of times to cypher (int):");
-    stdin.read_line(&mut times_to_cypther).unwrap();
+    println!("Enter the number of times to cypher (uint):");
+    times_to_cypther = input_int();
 
-    println!("Enter the shift value (int):");
-    stdin.read_line(&mut shift_value).unwrap();
+    println!("Enter the shift value (uint):");
+    shift_value = input_int();
 
-    println!("Enter the start shift value (int):");
-    stdin.read_line(&mut start_shift).unwrap();
+    println!("Enter the start shift value (uint):");
+    start_shift = input_int();
 
     let dvorak_cypher_parameters = DvorakCypherParameters {
         phrase_list: phrase_to_cypther,
-        times_to_cypher: times_to_cypther.trim().parse().unwrap(),
-        shift_value: shift_value.trim().parse().unwrap(),
-        start_shift: start_shift.trim().parse().unwrap(),
+        times_to_cypher: times_to_cypther,
+        shift_value: shift_value,
+        start_shift: start_shift,
     };
 
     let dvorak_cypher_result = dvorak_cypher(dvorak_cypher_parameters);
@@ -41,6 +40,19 @@ fn main() -> io::Result<()> {
     println!("start shift value: {}", dvorak_cypher_result.start_shift);
 
     Ok(())
+}
+
+fn input_int() -> u32 {
+    let mut input;
+    let uint: u32 = loop {
+        input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        match input.trim().parse() {
+            Ok(num) => break num,
+            Err(_) => println!("Please type a number!"),
+        }
+    };
+    uint
 }
 
 fn dvorak_cypher(mut dvorak_cypher_parameters: DvorakCypherParameters) -> DvorakCypherParameters {
