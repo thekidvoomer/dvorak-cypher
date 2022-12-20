@@ -1,19 +1,38 @@
+use rand::Rng;
 use std::io;
 
 fn main() -> io::Result<()> {
     let mut phrase_to_cypther = String::new();
-    let times_to_cypther: u32;
-    let shift_value: u32;
-    let start_shift: u32;
+    let mut manual_input = String::new();
+    let dvorak_cypher_parameters: DvorakCypherParameters;
 
     let stdin = io::stdin();
 
-    //  TODO: random inputs (appart from the phrase)
     //  TODO: decipher
     //  TODO: input file
 
     println!("Enter a phrase to cypher:");
     stdin.read_line(&mut phrase_to_cypther).unwrap();
+
+    println!("Manually enter cypher parameters(y/N):");
+    stdin.read_line(&mut manual_input).unwrap();
+    if manual_input.trim() == "y" {
+        dvorak_cypher_parameters = input_dvorak_cypher_parameters(phrase_to_cypther);
+    } else {
+        dvorak_cypher_parameters = random_dvorak_cypher_parameters(phrase_to_cypther);
+    }
+
+    let dvorak_cypher_result = dvorak_cypher(dvorak_cypher_parameters);
+
+    output_result(dvorak_cypher_result);
+
+    Ok(())
+}
+
+fn input_dvorak_cypher_parameters(phrase_to_cypther: String) -> DvorakCypherParameters {
+    let times_to_cypther: u32;
+    let shift_value: u32;
+    let start_shift: u32;
 
     println!("Enter the number of times to cypher (uint):");
     times_to_cypther = input_int();
@@ -30,16 +49,7 @@ fn main() -> io::Result<()> {
         shift_value: shift_value,
         start_shift: start_shift,
     };
-
-    let dvorak_cypher_result = dvorak_cypher(dvorak_cypher_parameters);
-
-    println!("Cyphered phrase:");
-    print!("{}", dvorak_cypher_result.phrase_list);
-    println!("cypher depth: {}", dvorak_cypher_result.times_to_cypher);
-    println!("shift value: {}", dvorak_cypher_result.shift_value);
-    println!("start shift value: {}", dvorak_cypher_result.start_shift);
-
-    Ok(())
+    dvorak_cypher_parameters
 }
 
 fn input_int() -> u32 {
@@ -53,6 +63,29 @@ fn input_int() -> u32 {
         }
     };
     uint
+}
+
+fn random_dvorak_cypher_parameters(phrase_to_cypther: String) -> DvorakCypherParameters {
+    let mut rng = rand::thread_rng();
+    let times_to_cypher = rng.gen_range(1..20);
+    let shift_value = rng.gen_range(1..20);
+    let start_shift = rng.gen_range(1..20);
+
+    let dvorak_cypher_parameters = DvorakCypherParameters {
+        phrase_list: phrase_to_cypther,
+        times_to_cypher: times_to_cypher,
+        shift_value: shift_value,
+        start_shift: start_shift,
+    };
+    dvorak_cypher_parameters
+}
+
+fn output_result(dvorak_cypher_result: DvorakCypherParameters) -> () {
+    println!("Cyphered phrase:");
+    print!("{}", dvorak_cypher_result.phrase_list);
+    println!("cypher depth: {}", dvorak_cypher_result.times_to_cypher);
+    println!("shift value: {}", dvorak_cypher_result.shift_value);
+    println!("start shift value: {}", dvorak_cypher_result.start_shift);
 }
 
 fn dvorak_cypher(mut dvorak_cypher_parameters: DvorakCypherParameters) -> DvorakCypherParameters {
